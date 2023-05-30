@@ -6,7 +6,7 @@
 NAME =		philo
 B_NAME =	philo_bonus
 
-ARGS = 4 410 200 200
+ARGS = 5 800 200 200 7
 
 #colors
 RESET 			:= \033[0m
@@ -25,13 +25,16 @@ LOG_SUC			:= printf "[$(CYAN)COMPILING_INFO$(RESET)] %s\n"
 ################################################################################
 
 #scr functions
-MANDATORY_FILES =	main.c
+SRCS =				01_main.c				\
+					02_validate_input.c		\
+					libft_funct.c			\
 
 BONUS_FILES =
 
-HEADER =			philo.h
+HEADER =			/include/philo.h
 
 #directories
+VPATH =				srcs
 OBJPATH =			temps
 
 
@@ -54,11 +57,11 @@ RM =		-rm -f
 RM_DIR =	rm -rf
 
 #tranform into .o
-OBJ_MANDATORY = $(MANDATORY_FILES:%.c=$(OBJPATH)/%.o)
+OBJ_MANDATORY = $(SRCS:%.c=$(OBJPATH)/%.o)
 OBJ_BONUS = $(BONUS_FILES:%.c=$(OBJPATH)/%.o)
 
 #compiling bar
-NUMBER_OF_FILES	=	$(words $(MANDATORY_FILES))
+NUMBER_OF_FILES	=	$(words $(SRCS))	
 PROGRESS			=	0
 
 ################################################################################
@@ -86,7 +89,7 @@ $(B_NAME): $(OBJ_BONUS)
 		@cc $(FLAGS) -o $(B_NAME) $(OBJ_BONUS) 
 
 ##compile MANDATORY
-$(OBJPATH)/%.o: $(MANDATORY_PATH)/%.c $(HEADER)
+$(OBJPATH)/%.o: $(VPATH)/%.c $(HEADER)
 		@cc $(FLAGS) -c $< -o $@ $(INCLUDE)
 		@echo -n "$(YELLOW)Compiling ${NAME} $(WHITE)$$(( $(PROGRESS) * 100 / $(NUMBER_OF_FILES)))%\r"
 		$(eval PROGRESS=$(shell echo $$(($(PROGRESS)+1))))
@@ -95,10 +98,17 @@ $(OBJPATH)/%.o: $(MANDATORY_PATH)/%.c $(HEADER)
 $(OBJPATH)/%.o: $(BONUS_PATH)/%.c $(HEADER)
 		cc $(FLAGS) -c $< -o $@ $(INCLUDE)
 
-#make mem -> mcheck
-mem:
+#make val -> mcheck
+val:
 		$(VAL) ./$(NAME) $(ARGS)
 
+#make vdrd -> check Data Race Detector
+vdrd:
+		valgrind --tool=helgrind ./$(NAME) $(ARGS)
+
+#make hell -> data race conditions & deadlock
+hell:
+		valgrind --tool=helgrind ./$(NAME) $(ARGS)
 
 #make clean -> remove objects
 clean:
@@ -127,5 +137,5 @@ git:
 
 norm:
 		clear
-		@norminette ${addprefix ${MANDATORY_PATH}/, ${MANDATORY_FILES}} | grep -v "OK!" || echo "All files ok!"
+		@norminette ${addprefix ${VPATH}/, ${SRCS}}			 | grep -v "OK!" || echo "All files ok!"
 

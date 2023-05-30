@@ -6,7 +6,7 @@
 /*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 18:34:47 by feralves          #+#    #+#             */
-/*   Updated: 2023/05/29 18:57:11 by feralves         ###   ########.fr       */
+/*   Updated: 2023/05/30 11:39:51 by feralves         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,28 @@
 // pthread_mutex_lock / pthread_mutex_unlock
 
 
+# define FALSE 0
+# define TRUE 1
+# define INT_MAX 2147483647
+
+//structs
+
+typedef struct	s_init
+{
+	int			nbr_of_philos;
+	int			time_to_die;
+	int			time_eating;
+	int			time_sleeping;
+	int			nbr_of_times_to_eat;
+}				t_init;
+
 //libft_funct.c
-int	ft_strlen(char *str);
+int			ft_strlen(char *str);
+int			ft_isdigit(int c);
+long int	ft_atoi_mod(char *nptr);
+
+//validate_input.c
+int			arguments_validation(int argc, char *argv[], t_init *init);
 
 
 #endif

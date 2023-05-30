@@ -1,35 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   01_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 18:34:51 by feralves          #+#    #+#             */
-/*   Updated: 2023/05/29 19:01:34 by feralves         ###   ########.fr       */
+/*   Updated: 2023/05/30 11:45:34 by feralves         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ft_error(char *str)
+void	print_test(t_init *init)
 {
-	write(2, str, ft_strlen(str));
-	return (1);
+	int	index;
+
+	index = 0;
+	printf("number_of_philosophers: %d\n", init->nbr_of_philos);
+	printf("time_to_die: %d\n", init->time_to_die);
+	printf("time_to_eat: %d\n", init->time_eating);
+	printf("time_to_sleep: %d\n", init->time_sleeping);
+	printf("number_of_times_each_philosopher_must_eat: %d\n", init->nbr_of_times_to_eat);
+	free(init);
 }
 
-int	arguments_validation(int argc, char *argv[])
-{
-	if (argc < 5 || argc > 6)
-		return (ft_error("Error: Wrong number of arguments.\n"));
-	//verificar argv numérico e positivo em todas as casas
-	return (0);
-}
-
+//number_of_philosophers 
+//time_to_die 
+//time_to_eat 
+//time_to_sleep 
+//[number_of_times_each_philosopher_must_eat]
 int	main(int argc, char *argv[])
 {
-	if (!arguments_validation(argc, argv))
+	t_init	*init;
+
+	init = NULL;
+	if (!arguments_validation(argc, argv, init))
 		return (-1);
-	//iniciar threads
+	print_test(init);
 	return (0);
 }
+	//iniciar threads

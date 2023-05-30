@@ -6,7 +6,7 @@
 /*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 18:34:47 by feralves          #+#    #+#             */
-/*   Updated: 2023/05/30 11:39:51 by feralves         ###   ########.fr       */
+/*   Updated: 2023/05/30 13:45:15 by feralves         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include <pthread.h> //phthread_create / pthread_detach 
 // pthread_join / pthread_mutex_init / pthread_mutex_destroy 
 // pthread_mutex_lock / pthread_mutex_unlock
-
 
 # define FALSE 0
 # define TRUE 1
@@ -43,8 +42,8 @@ int			ft_strlen(char *str);
 int			ft_isdigit(int c);
 long int	ft_atoi_mod(char *nptr);
 
-//validate_input.c
-int			arguments_validation(int argc, char *argv[], t_init *init);
+//02_validate_input.c
+int			arguments_validation(int argc, char *argv[], t_init **init);
 
 
 #endif

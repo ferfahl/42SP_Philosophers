@@ -1,133 +1,115 @@
 ################################################################################
-##                               42 PUSH SWAP                                 ##
+##                              42 PHILOSOPHERS                               ##
 ################################################################################
 
-#static library's name
-NAME =		philo
-B_NAME =	philo_bonus
+NAME			:= mandatory_philo
 
-ARGS = 5 800 200 200 7
+EXECUTABLE		:= philo
 
-#colors
-RESET 			:= \033[0m
-GREEN			=	\e[32m
-CYAN  			:= \33[1;36m
-YELLOW			=	\e[033m
-BLUE			=	\e[34m
-WHITE			=	\e[00m
+ARGS			:= 5 800 200 200 5
 
-#printing
-LOG   			:= printf "[$(GREEN)PROJECT_INFO$(RESET)] %s\n"
-LOG_SUC			:= printf "[$(CYAN)COMPILING_INFO$(RESET)] %s\n"
-
-################################################################################
-##                                DIRECTORIES                                 ##
-################################################################################
-
-#scr functions
-SRCS =				01_main.c				\
-					02_validate_input.c		\
-					libft_funct.c			\
-
-BONUS_FILES =
-
-HEADER =			/include/philo.h
-
-#directories
-VPATH =				srcs
-OBJPATH =			temps
-
-
-#header to libft.h
-INCLUDE =	-I ./ -I 
+RESET			:= \033[0m
+GREEN			:=	\e[32m
+CYAN			:= \33[1;36m
+YELLOW			:=	\e[033m
+BLUE			:=	\e[34m
+WHITE			:=	\e[00m
 
 ################################################################################
 ##                                 COMPILATION                                ##
 ################################################################################
 
+#printing
+LOG   			:= printf "[$(GREEN)PROJECT_INFO$(RESET)] %s\n"
+LOG_SUC			:= printf "[$(CYAN)COMPILING_INFO$(RESET)] %s\n\r"
+
 #compiling
-CC =	gcc
-FLAGS =	-Wall -Werror -Wextra -g3
-GDB =	gdb
-VAL =	valgrind --leak-check=full --track-origins=yes
-## --trace-children=yes --track-fds=yes
+CC		:=	cc
+CFLAGS	:=	-Wall -Werror -Wextra -g3
+GDB		:=	gdb
+VAL		:=	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --tool=memcheck
 
 # clean
 RM =		-rm -f
 RM_DIR =	rm -rf
 
+################################################################################
+##                                DIRECTORIES                                 ##
+################################################################################
+
+OBJ_DIR			:=	temps
+INC_DIRS		:=	include
+SRC_DIRS		:=	$(addprefix philo/, $(SRC_DIRS))
+SRC_DIRS		+=	srcs
+
+vpath %.h $(INC_DIRS)
+vpath %.c $(SRC_DIRS)
+
+HEADERS			:=	philo.h
+
+SOURCES			:=	01_main.c \
+					02_validate_input.c \
+					libft_funct.c
+
 #tranform into .o
-OBJ_MANDATORY = $(SRCS:%.c=$(OBJPATH)/%.o)
-OBJ_BONUS = $(BONUS_FILES:%.c=$(OBJPATH)/%.o)
+OBJS			:=	$(addprefix $(OBJ_DIR)/, $(SOURCES:.c=.o))
 
 #compiling bar
-NUMBER_OF_FILES	=	$(words $(SRCS))	
-PROGRESS			=	0
+NUMBER_OF_FILES	:=	$(words $(SOURCES))
+PROGRESS		:=	0
 
 ################################################################################
-##                                    RULES                                   ##
+##                                    RULES                                  ##
 ################################################################################
 
-#make
-all: $(OBJPATH) $(NAME)
+CFLAGS			:=	-Wall -Werror -Wextra -g $(addprefix -I,$(INC_DIRS))
 
-#make bonus
-bonus: $(OBJPATH) $(B_NAME)
+all:			$(NAME)
 
-##folder for temporary objects
-$(OBJPATH):
-		@$(LOG) "Creating objects directory..."
-		@mkdir -p $(OBJPATH)
+$(NAME):		$(EXECUTABLE)
 
-##rule name - make philo
-$(NAME): $(OBJ_MANDATORY)
-		@cc $(FLAGS) -o $(NAME) $(OBJ_MANDATORY) 
-		@$(LOG_SUC) "*$(NAME) succesfully compiled!"
+$(EXECUTABLE):	$(OBJS)
+	@$(LOG_SUC) "Compiling $@"
+	@$(CC) $^ -lrt -lpthread -o $@
+	@$(LOG) "$@ compiled successfully!"
 
-##rule name - make philo_bonus
-$(B_NAME): $(OBJ_BONUS)
-		@cc $(FLAGS) -o $(B_NAME) $(OBJ_BONUS) 
-
-##compile MANDATORY
-$(OBJPATH)/%.o: $(VPATH)/%.c $(HEADER)
-		@cc $(FLAGS) -c $< -o $@ $(INCLUDE)
-		@echo -n "$(YELLOW)Compiling ${NAME} $(WHITE)$$(( $(PROGRESS) * 100 / $(NUMBER_OF_FILES)))%\r"
+$(OBJ_DIR)/%.o: %.c $(HEADERS) | $(OBJ_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo -n "$(YELLOW)Compiling ${EXECUTABLE} $(WHITE)$$(( $(PROGRESS) * 100 / $(NUMBER_OF_FILES)))%\r"
 		$(eval PROGRESS=$(shell echo $$(($(PROGRESS)+1))))
 
-##compile BONUS
-$(OBJPATH)/%.o: $(BONUS_PATH)/%.c $(HEADER)
-		cc $(FLAGS) -c $< -o $@ $(INCLUDE)
+$(OBJ_DIR):
+	@$(LOG) "Creating objects directory"
+	@mkdir $@
+	@$(LOG_SUC) "Compiling objects..."
 
-#make val -> mcheck
-val:
-		$(VAL) ./$(NAME) $(ARGS)
+drd: $(NAME)
+	valgrind --tool=drd ./$(EXECUTABLE) $(ARGS)
 
-#make vdrd -> check Data Race Detector
-vdrd:
-		valgrind --tool=helgrind ./$(NAME) $(ARGS)
+hell: $(NAME)
+	valgrind --tool=helgrind ./$(EXECUTABLE) $(ARGS)
 
-#make hell -> data race conditions & deadlock
-hell:
-		valgrind --tool=helgrind ./$(NAME) $(ARGS)
+val: $(NAME)
+	valgrind -q --leak-check=full --show-leak-kinds=all \
+		--track-origins=yes ./$(EXECUTABLE) $(ARGS)
 
-#make clean -> remove objects
 clean:
-		@$(LOG) "Removing objects..."
-		@$(RM) $(OBJ_MANDATORY) $(OBJ_BONUS)
+	@$(RM) -r $(OBJS)
+	@$(LOG) "Removing objects"
+	@$(RM) -r $(OBJ_DIR)
+	@$(LOG) "Removing objects directory"
 
-#make fclean -> remove all
 fclean: clean
-		@$(LOG) "Removing executable..."
-		@$(RM) $(NAME) $(B_NAME)
-		@$(RM_DIR) $(OBJPATH)
-		@$(LOG_SUC) "Cleaned project!"
+	@$(LOG) "Removing $(EXECUTABLE)"
+	@$(RM) -r $(EXECUTABLE)
+	@$(LOG_SUC) "Cleaned project!"
 
-#make re -> clear all and recompliles
-re:		fclean all
-		@$(LOG_SUC) "Recompiled succesfully!"
+re: fclean all
 
-##avoids double inclusion
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re
+
+teste: $(NAME)
+	./$(EXECUTABLE) $(ARGS)
 
 #make git m="message" -> commit to git
 git:
@@ -137,5 +119,4 @@ git:
 
 norm:
 		clear
-		@norminette ${addprefix ${VPATH}/, ${SRCS}}			 | grep -v "OK!" || echo "All files ok!"
-
+		@norminette ${addprefix ${SRC_DIRS}/, ${SOURCES}} | grep -v "OK!" || echo "All files ok!"

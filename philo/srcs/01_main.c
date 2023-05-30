@@ -6,17 +6,19 @@
 /*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 18:34:51 by feralves          #+#    #+#             */
-/*   Updated: 2023/05/30 11:45:34 by feralves         ###   ########.fr       */
+/*   Updated: 2023/05/30 13:50:02 by feralves         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philo.h"
 
 void	print_test(t_init *init)
 {
 	int	index;
 
 	index = 0;
+	// (void)init;
+	// printf("Teste\n");
 	printf("number_of_philosophers: %d\n", init->nbr_of_philos);
 	printf("time_to_die: %d\n", init->time_to_die);
 	printf("time_to_eat: %d\n", init->time_eating);
@@ -35,9 +37,9 @@ int	main(int argc, char *argv[])
 	t_init	*init;
 
 	init = NULL;
-	if (!arguments_validation(argc, argv, init))
+	if (!arguments_validation(argc, argv, &init))
 		return (-1);
 	print_test(init);
+	//iniciar threads
 	return (0);
 }
-	//iniciar threads

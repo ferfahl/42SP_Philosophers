@@ -6,11 +6,11 @@
 /*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 18:56:20 by feralves          #+#    #+#             */
-/*   Updated: 2023/05/30 11:45:35 by feralves         ###   ########.fr       */
+/*   Updated: 2023/05/30 12:41:39 by feralves         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philo.h"
 
 int	ft_strlen(char *str)
 {

@@ -69,9 +69,11 @@ all:			$(NAME)
 $(NAME):		$(EXECUTABLE)
 
 $(EXECUTABLE):	$(OBJS)
-	@$(LOG_SUC) "Compiling $@"
-	@$(CC) $^ -lrt -lpthread -o $@
+	@$(LOG_SUC) "Compiling $@..."
+	@$(CC) $(CFLAGS) -lpthread $(OBJS) -o $@
 	@$(LOG) "$@ compiled successfully!"
+
+## -lrt  (para usar no philo depois do $^)
 
 $(OBJ_DIR)/%.o: %.c $(HEADERS) | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@

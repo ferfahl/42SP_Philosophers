@@ -47,9 +47,10 @@ vpath %.c $(SRC_DIRS)
 
 HEADERS			:=	philo.h
 
-SOURCES			:=	01_main.c \
-					02_validate_input.c \
-					libft_funct.c
+SOURCES			:=	libft_funct.c			\
+					02_validate_input.c		\
+					01_main.c				\
+					# teste.fclean			\
 
 #tranform into .o
 OBJS			:=	$(addprefix $(OBJ_DIR)/, $(SOURCES:.c=.o))

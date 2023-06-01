@@ -25,6 +25,12 @@ typedef struct	s_init
 	int			nbr_of_times_to_eat;
 }				t_init;
 
+typedef struct	s_philos
+{
+	int			id;
+	int			value;
+	
+}
 //libft_funct.c
 int			ft_strlen(char *str);
 int			ft_isdigit(int c);

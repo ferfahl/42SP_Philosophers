@@ -49,8 +49,8 @@ HEADERS			:=	philo.h
 
 SOURCES			:=	libft_funct.c			\
 					02_validate_input.c		\
-					01_main.c				\
-					# teste.fclean			\
+					testesf.c				\
+					# 01_main.c				\
 
 #tranform into .o
 OBJS			:=	$(addprefix $(OBJ_DIR)/, $(SOURCES:.c=.o))

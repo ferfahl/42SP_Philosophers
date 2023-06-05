@@ -50,6 +50,8 @@ HEADERS			:=	philo.h
 SOURCES			:=	libft_funct.c			\
 					01_main.c				\
 					02_validate_input.c		\
+					03_init.c				\
+					04_routine.c			\
 					utils.c					\
 					testesf.c				\
 

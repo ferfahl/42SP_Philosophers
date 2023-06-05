@@ -14,6 +14,15 @@
 # define TRUE 1
 # define INT_MAX 2147483647
 
+typedef enum e_doing
+{
+	TAKING_FORK,
+	EATING,
+	SLEEPING,
+	THINKING,
+	DEAD
+}			t_doing;
+
 //structs
 
 typedef struct	s_init
@@ -43,6 +52,7 @@ typedef struct	s_philos
 	int				meals_eaten;
 	int				last_meal;
 	struct s_init	*init;
+	pthread_mutex_t	*print;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 }				t_philos;
@@ -57,6 +67,13 @@ void	ft_putendl_fd(char *s, int fd);
 
 //02_validate_input.c
 int			arguments_validation(int argc, char *argv[], t_init **init);
+
+//03_init.c
+t_philos	*init_philos(t_init *init, t_forks *forks);
+t_forks		*init_forks(t_init *init);
+
+//04_routine.c
+void	*routine(void *philo_action);
 
 //utils
 long int	get_time(void);

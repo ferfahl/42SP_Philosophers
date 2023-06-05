@@ -16,7 +16,7 @@ int	verify_death(t_philos *philo)
 	return (0);
 }
 
-int	get_forks(t_philos *philo)
+int	eating(t_philos *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
 	//print_status(philo, "has taken a fork");
@@ -28,31 +28,29 @@ int	get_forks(t_philos *philo)
 		pthread_mutex_unlock(philo->right_fork);
 		return (1);
 	}
-	return (0);
-}
-
-void	eat(t_philos *philo)
-{
 	philo->meals_eaten++;
 	//print_status(philo, "is eating");
 	usleep(philo->init->time_eating); //function to make time right?
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 	philo->last_meal = get_time();
-}
-
-int	serve_meal(t_philos *philo)
-{
-	if (get_forks(philo))
-		return (1);
-	eat(philo);
 	return (0);
 }
 
 void	sleeping(t_philos *philo)
 {
+	if (verify_death(philo))
+		return ;
 	//print_status(philo, "is sleeping");
 	usleep(philo->init->time_sleeping); //function to make time right?
+}
+
+void	thinking(t_philos *philo)
+{
+	if (verify_death(philo))
+		return ;
+	//print_status(philo, "is thinking");
+	//usleep?
 }
 
 void	*routine(void *philo_action)
@@ -64,15 +62,13 @@ void	*routine(void *philo_action)
 		usleep(10000);
 	while (!verify_death(p))
 	{
-		if (serve_meal(p))
+		if (eating(p))
 			return (NULL);
 		if ((p->init->nbr_of_times_to_eat != -1 && \
 			p->meals_eaten == p->init->nbr_of_times_to_eat) || verify_death(p))
 			return (NULL);
 		sleeping(p);
-		if (verify_death(p))
-			return (NULL);
-		// thinking(p);
+		thinking(p);
 		if (p->init->nbr_of_philos % 2)
 			usleep(2000);
 	}

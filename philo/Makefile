@@ -50,6 +50,7 @@ HEADERS			:=	philo.h
 SOURCES			:=	libft_funct.c			\
 					01_main.c				\
 					02_validate_input.c		\
+					utils.c					\
 					testesf.c				\
 
 #tranform into .o

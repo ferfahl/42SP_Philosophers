@@ -5,8 +5,9 @@ static int	input_error(char *str)
 	write(2, "Error:", 6);
 	write(2, " ", 1);
 	write(2, str, ft_strlen(str));
-	printf("Run: ./philo [nbr_of_philosophers] [time_to_die] [time_eating] "
-		"[time_sleeping] [nbr_of_times_each_philosopher_must_eat](optional)\n");
+	ft_putendl_fd("Run: ./philo [nbr_of_philosophers] [time_to_die] "
+		"[time_eating] [time_sleeping] "
+		"[nbr_of_times_each_philosopher_must_eat]", 2);
 	return (FALSE);
 }
 
@@ -17,10 +18,14 @@ static void	init_philo(int argc, char *argv[], t_init **init)
 	(*init)->time_to_die = ft_atoi_mod(argv[2]);
 	(*init)->time_eating = ft_atoi_mod(argv[3]);
 	(*init)->time_sleeping = ft_atoi_mod(argv[4]);
+	(*init)->nbr_of_times_to_eat = -1;
 	if (argc == 6)
 		(*init)->nbr_of_times_to_eat = ft_atoi_mod(argv[5]);
-	else
-		(*init)->nbr_of_times_to_eat = -1;
+	(*init)->start_time = get_time();
+	(*init)->someone_died = FALSE;
+	pthread_mutex_init(&(*init)->stop_dinner, NULL);
+	pthread_mutex_init(&(*init)->death, NULL);
+	pthread_mutex_init(&(*init)->print_status, NULL);
 }
 
 int	arguments_validation(int argc, char *argv[], t_init **init)

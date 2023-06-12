@@ -6,7 +6,7 @@
 /*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 16:41:06 by feralves          #+#    #+#             */
-/*   Updated: 2023/06/12 17:47:11 by feralves         ###   ########.fr       */
+/*   Updated: 2023/06/12 20:13:02 by feralves         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ static void	raise_stop_dinner(t_init *init)
 
 void	*monitor(void *arg)
 {
-	t_philos		*philo;
+	t_philos	*philo;
 	t_init		*init;
-	int		count;
+	int			count;
 
 	philo = (t_philos *)arg;
 	init = philo[0].init;

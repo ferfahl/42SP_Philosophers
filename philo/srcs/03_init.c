@@ -6,7 +6,7 @@
 /*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 14:13:15 by feralves          #+#    #+#             */
-/*   Updated: 2023/06/12 19:06:07 by feralves         ###   ########.fr       */
+/*   Updated: 2023/06/12 20:12:45 by feralves         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_forks	*init_forks(t_init *init)
 {
 	t_forks	*forks;
 	int		i;
-	
+
 	i = 0;
 	forks = malloc(sizeof(t_forks) * init->nbr_of_philos);
 	if (!forks)
@@ -32,7 +32,7 @@ t_forks	*init_forks(t_init *init)
 
 static int	check_forks(int i, int nbr, int check)
 {
-	int j;
+	int	j;
 
 	j = ((i + 1) % nbr);
 	if (check == 0)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/12 20:13:52 by feralves          #+#    #+#             */
+/*   Updated: 2023/06/12 20:14:51 by feralves         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -25,7 +37,7 @@ typedef enum e_doing
 
 //structs
 
-typedef struct	s_init
+typedef struct s_init
 {
 	int				nbr_of_philos;
 	int				time_to_die;
@@ -42,13 +54,13 @@ typedef struct	s_init
 	pthread_mutex_t	m_meals_repeated;
 }				t_init;
 
-typedef struct	s_forks
+typedef struct s_forks
 {
 	int				has_fork;
 	pthread_mutex_t	fork;
 }				t_forks;
 
-typedef struct	s_philos
+typedef struct s_philos
 {
 	int				id;
 	int				value;
@@ -65,7 +77,7 @@ typedef struct	s_philos
 int			ft_strlen(char *str);
 int			ft_isdigit(int c);
 long int	ft_atoi_mod(char *nptr);
-void	ft_putendl_fd(char *s, int fd);
+void		ft_putendl_fd(char *s, int fd);
 
 //02_validate_input.c
 int			arguments_validation(int argc, char *argv[], t_init **init);
@@ -75,16 +87,13 @@ t_philos	*init_philos(t_init *init, t_forks *forks);
 t_forks		*init_forks(t_init *init);
 
 //04_routine.c
-void	*routine(void *philo_action);
+void		*routine(void *philo_action);
+
+//05_monitor.c
+void		*monitor(void *arg);
 
 //utils
 long int	get_time(void);
 void		print_status(t_philos *philo, char *status);
-
-
-//DUMP
-
-void	print_test(t_init *init);
-void	*monitor(void *arg);
 
 #endif

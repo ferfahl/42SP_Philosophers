@@ -6,7 +6,7 @@
 /*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 14:13:37 by feralves          #+#    #+#             */
-/*   Updated: 2023/06/12 14:48:41 by feralves         ###   ########.fr       */
+/*   Updated: 2023/06/12 20:13:15 by feralves         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ long int	get_time(void)
 void	print_status(t_philos *philo, char *status)
 {
 	long int	time;
-	
+
 	pthread_mutex_lock(&philo->init->print_status);
 	time = get_time() - philo->init->start_time;
 	printf("%ld %d %s\n", time, philo->id, status);

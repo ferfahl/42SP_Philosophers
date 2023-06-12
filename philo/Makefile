@@ -54,7 +54,6 @@ SOURCES			:=	libft_funct.c			\
 					04_routine.c			\
 					05_manager.c			\
 					utils.c					\
-					testesf.c				\
 
 #tranform into .o
 OBJS			:=	$(addprefix $(OBJ_DIR)/, $(SOURCES:.c=.o))

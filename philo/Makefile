@@ -52,6 +52,7 @@ SOURCES			:=	libft_funct.c			\
 					02_validate_input.c		\
 					03_init.c				\
 					04_routine.c			\
+					05_manager.c			\
 					utils.c					\
 					testesf.c				\
 

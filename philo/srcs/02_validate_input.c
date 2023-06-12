@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   02_validate_input.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/12 14:13:23 by feralves          #+#    #+#             */
+/*   Updated: 2023/06/12 17:29:24 by feralves         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
 static int	input_error(char *str)
@@ -18,6 +30,7 @@ static void	init_philo(int argc, char *argv[], t_init **init)
 	(*init)->time_to_die = ft_atoi_mod(argv[2]);
 	(*init)->time_eating = ft_atoi_mod(argv[3]);
 	(*init)->time_sleeping = ft_atoi_mod(argv[4]);
+	(*init)->meals_eaten = 0;
 	(*init)->nbr_of_times_to_eat = -1;
 	if (argc == 6)
 		(*init)->nbr_of_times_to_eat = ft_atoi_mod(argv[5]);
@@ -26,6 +39,8 @@ static void	init_philo(int argc, char *argv[], t_init **init)
 	pthread_mutex_init(&(*init)->stop_dinner, NULL);
 	pthread_mutex_init(&(*init)->death, NULL);
 	pthread_mutex_init(&(*init)->print_status, NULL);
+	pthread_mutex_init(&(*init)->m_last_meal, NULL);
+	pthread_mutex_init(&(*init)->m_meals_repeated, NULL);
 }
 
 int	arguments_validation(int argc, char *argv[], t_init **init)

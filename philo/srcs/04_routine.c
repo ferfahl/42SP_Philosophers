@@ -1,74 +1,89 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   04_routine.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/12 14:13:29 by feralves          #+#    #+#             */
+/*   Updated: 2023/06/12 19:32:15 by feralves         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
-int	verify_death(t_philos *philo)
+int	is_everyone_alive(t_init *init)
 {
-	long int	time;
-
-	time = get_time();
-	if (time - philo->last_meal > philo->init->time_to_die)
+	pthread_mutex_lock(&init->death);
+	if (init->someone_died == TRUE)
 	{
-		//print_status(philo, "died");
-		pthread_mutex_lock(&philo->init->death);
-		philo->init->someone_died = TRUE;
-		pthread_mutex_unlock(&philo->init->death);
-		return (1);
+		pthread_mutex_unlock(&init->death);
+		return (TRUE);
 	}
-	return (0);
+	pthread_mutex_unlock(&init->death);
+	return (FALSE);
 }
 
-int	eating(t_philos *philo)
+int	eating(t_init *init, t_philos *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
-	//print_status(philo, "has taken a fork");
-	pthread_mutex_lock(philo->right_fork);
-	//print_status(philo, "has taken a fork");
-	if (verify_death(philo))
-	{
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
+	if (is_everyone_alive(init))
 		return (1);
+	print_status(philo, "has taken a fork");
+	if (philo->init->nbr_of_philos == 1)
+	{
+		usleep(philo->init->time_to_die);
+		pthread_mutex_lock(&philo->init->death);
+		init->someone_died = TRUE;
+		pthread_mutex_unlock(&philo->init->death);
+		return (0);
 	}
+	pthread_mutex_lock(philo->right_fork);
+	pthread_mutex_lock(&philo->init->m_last_meal);
+	philo->last_meal = get_time();
+	pthread_mutex_unlock(&philo->init->m_last_meal);
+	pthread_mutex_lock(&init->stop_dinner);
 	philo->meals_eaten++;
-	//print_status(philo, "is eating");
-	usleep(philo->init->time_eating); //function to make time right?
+	pthread_mutex_unlock(&init->stop_dinner);
+	print_status(philo, "has taken a fork");
+	print_status(philo, "is eating");
+	usleep(philo->init->time_eating * 1000);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
-	philo->last_meal = get_time();
-	return (0);
+	return (1);
 }
 
-void	sleeping(t_philos *philo)
+void	sleeping(t_init *init, t_philos *philo)
 {
-	if (verify_death(philo))
+	if (is_everyone_alive(init))
 		return ;
-	//print_status(philo, "is sleeping");
-	usleep(philo->init->time_sleeping); //function to make time right?
+	print_status(philo, "is sleeping");
+	usleep(init->time_sleeping * 1000);
 }
 
-void	thinking(t_philos *philo)
+void	thinking(t_init *init, t_philos *philo)
 {
-	if (verify_death(philo))
+	if (is_everyone_alive(init))
 		return ;
-	//print_status(philo, "is thinking");
-	//usleep?
+	print_status(philo, "is thinking");
 }
 
 void	*routine(void *philo_action)
 {
 	t_philos	*p;
+	t_init		*init;
 
 	p = (t_philos *)philo_action;
+	init = p[0].init;
 	if (!(p->id % 2))
 		usleep(10000);
-	while (!verify_death(p))
+	while (!is_everyone_alive(init))
 	{
-		if (eating(p))
+		eating(init, p);
+		if (p->meals_eaten == p->init->nbr_of_times_to_eat)
 			return (NULL);
-		if ((p->init->nbr_of_times_to_eat != -1 && \
-			p->meals_eaten == p->init->nbr_of_times_to_eat) || verify_death(p))
-			return (NULL);
-		sleeping(p);
-		thinking(p);
+		sleeping(init, p);
+		thinking(init, p);
 		if (p->init->nbr_of_philos % 2)
 			usleep(2000);
 	}

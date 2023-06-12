@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   03_init.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/12 14:13:15 by feralves          #+#    #+#             */
+/*   Updated: 2023/06/12 19:06:07 by feralves         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
 t_forks	*init_forks(t_init *init)
@@ -53,7 +65,6 @@ t_philos	*init_philos(t_init *init, t_forks *forks)
 		philos[i].meals_eaten = 0;
 		philos[i].last_meal = get_time();
 		philos[i].init = init;
-		philos[i].print = &init->print_status;
 		philos[i].left_fork = \
 			&forks[check_forks(i, init->nbr_of_philos, 0)].fork;
 		philos[i].right_fork = \

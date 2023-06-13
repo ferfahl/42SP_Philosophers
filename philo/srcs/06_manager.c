@@ -6,27 +6,27 @@
 /*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 16:41:06 by feralves          #+#    #+#             */
-/*   Updated: 2023/06/13 10:31:59 by feralves         ###   ########.fr       */
+/*   Updated: 2023/06/13 11:30:51 by feralves         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-static int	is_stuffed(t_init *init, t_philos *p)
+static int	is_full(t_init *init, t_philos *p)
 {
-	int	boolean;
+	int	check;
 
-	boolean = FALSE;
+	check = FALSE;
 	pthread_mutex_lock(&init->stop_dinner);
 	if (p->meals_eaten == init->nbr_of_times_to_eat)
-		boolean = TRUE;
+		check = TRUE;
 	pthread_mutex_unlock(&init->stop_dinner);
-	return (boolean);
+	return (check);
 }
 
-static int	died_of_starvation(t_philos *philo)
+static int	is_dead(t_philos *philo)
 {
-	long	last_meal;
+	long int	last_meal;
 
 	pthread_mutex_lock(&philo->init->m_last_meal);
 	last_meal = get_time() - philo->last_meal;
@@ -36,7 +36,7 @@ static int	died_of_starvation(t_philos *philo)
 	return (FALSE);
 }
 
-static void	raise_stop_dinner(t_init *init)
+static void	stop_dinner(t_init *init)
 {
 	pthread_mutex_lock(&init->death);
 	init->someone_died = TRUE;
@@ -51,20 +51,20 @@ void	*monitor(void *arg)
 
 	philo = (t_philos *)arg;
 	init = philo[0].init;
-	while (!is_stuffed(init, philo))
+	while (!is_full(init, philo))
 	{
 		count = 0;
 		while (count < init->nbr_of_philos)
 		{
-			if (died_of_starvation(&philo[count]))
+			if (is_dead(&philo[count]))
 			{
-				raise_stop_dinner(init);
+				stop_dinner(init);
 				print_status(&philo[count], "is dead");
 				return (NULL);
 			}
 			count++;
 		}
-		usleep(3000);
+		usleep(5000);
 	}
 	return (NULL);
 }

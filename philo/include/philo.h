@@ -6,7 +6,7 @@
 /*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 20:13:52 by feralves          #+#    #+#             */
-/*   Updated: 2023/06/12 20:14:51 by feralves         ###   ########.fr       */
+/*   Updated: 2023/06/13 10:36:36 by feralves         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,12 @@ t_forks		*init_forks(t_init *init);
 
 //04_routine.c
 void		*routine(void *philo_action);
+int			is_everyone_alive(t_init *init);
 
-//05_monitor.c
+//05_eating.c
+int			eating(t_init *init, t_philos *philo);
+
+//06_monitor.c
 void		*monitor(void *arg);
 
 //utils

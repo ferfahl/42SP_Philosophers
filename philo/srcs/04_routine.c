@@ -6,7 +6,7 @@
 /*   By: feralves <feralves@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 14:13:29 by feralves          #+#    #+#             */
-/*   Updated: 2023/06/12 19:52:17 by feralves         ###   ########.fr       */
+/*   Updated: 2023/06/13 10:36:46 by feralves         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,55 +24,14 @@ int	is_everyone_alive(t_init *init)
 	return (TRUE);
 }
 
-void	eating(t_init *init, t_philos *philo)
-{
-	if (!is_everyone_alive(init))
-		return ;
-	pthread_mutex_lock(philo->right_fork);
-	if (!is_everyone_alive(init))
-	{
-		pthread_mutex_unlock(philo->right_fork);
-		return ;
-	}
-	print_status(philo, "has taken a fork");
-	if (philo->init->nbr_of_philos == 1)
-	{
-		pthread_mutex_unlock(philo->right_fork);
-		usleep(philo->init->time_to_die);
-		pthread_mutex_lock(&philo->init->death);
-		init->someone_died = TRUE;
-		pthread_mutex_unlock(&philo->init->death);
-		return ;
-	}
-	pthread_mutex_lock(philo->left_fork);
-	pthread_mutex_lock(&philo->init->m_last_meal);
-	philo->last_meal = get_time();
-	pthread_mutex_unlock(&philo->init->m_last_meal);
-	pthread_mutex_lock(&init->stop_dinner);
-	philo->meals_eaten++;
-	pthread_mutex_unlock(&init->stop_dinner);
-	if (!is_everyone_alive(init))
-	{
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-		return ;
-	}
-	print_status(philo, "has taken a fork");
-	print_status(philo, "is eating");
-	usleep(philo->init->time_eating * 1000);
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
-	return ;
-}
-
-void	sleeping(t_init *init, t_philos *philo)
+static void	sleeping(t_init *init, t_philos *philo)
 {
 	if (is_everyone_alive(init))
 		print_status(philo, "is sleeping");
 	usleep(init->time_sleeping * 1000);
 }
 
-void	thinking(t_init *init, t_philos *philo)
+static void	thinking(t_init *init, t_philos *philo)
 {
 	if (is_everyone_alive(init))
 		print_status(philo, "is thinking");

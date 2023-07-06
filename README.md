@@ -9,7 +9,7 @@ I never thought philosophy would be so deadly
 ## Main goal
 This project asks students to solve the famous Dijkstra's synchronization problem called The Dining Philosophers Problem. This is a introduction to multithreads, multiprocesses, mutexes and semaphores.
 
-###The specific rules for the mandatory part are:
+### The specific rules for the mandatory part are:
 
 - Each philosopher should be a thread.
 - There is one fork between each pair of philosophers. Therefore, if there are several philosophers, each philosopher has a fork on their left side and a fork on their right side. If there is only one philosopher, there should be only one fork on the table.
